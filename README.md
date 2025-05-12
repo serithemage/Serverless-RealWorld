@@ -49,15 +49,15 @@ flowchart TD
     ProfileService --> AstraDB
     ArticleService --> AstraDB
     
-    style Client fill:#f9f,stroke:#333,stroke-width:2px
-    style Gateway fill:#bbf,stroke:#333,stroke-width:2px
-    style GraphQL fill:#bbf,stroke:#333,stroke-width:2px
-    style AuthService fill:#bfb,stroke:#333,stroke-width:2px
-    style ProfileService fill:#bfb,stroke:#333,stroke-width:2px
-    style ArticleService fill:#bfb,stroke:#333,stroke-width:2px
-    style Kafka fill:#fbb,stroke:#333,stroke-width:2px
-    style Cassandra fill:#ff9,stroke:#333,stroke-width:2px
-    style AstraDB fill:#ff9,stroke:#333,stroke-width:2px
+    style Client fill:#f69,stroke:#333,stroke-width:2px
+    style Gateway fill:#66f,stroke:#fff,stroke-width:2px
+    style GraphQL fill:#66f,stroke:#fff,stroke-width:2px
+    style AuthService fill:#6b6,stroke:#333,stroke-width:2px
+    style ProfileService fill:#6b6,stroke:#333,stroke-width:2px
+    style ArticleService fill:#6b6,stroke:#333,stroke-width:2px
+    style Kafka fill:#f66,stroke:#333,stroke-width:2px
+    style Cassandra fill:#ff6,stroke:#333,stroke-width:2px
+    style AstraDB fill:#ff6,stroke:#333,stroke-width:2px
 ```
 
 ## 목표 서버리스 아키텍처
@@ -118,18 +118,18 @@ flowchart TD
     SQS --> ProfileLambda
     SQS --> ArticleLambda
     
-    style Client fill:#f9f,stroke:#333,stroke-width:2px
-    style AppSync fill:#bbf,stroke:#333,stroke-width:2px
-    style APIGateway fill:#bbf,stroke:#333,stroke-width:2px
-    style AuthLambda fill:#bfb,stroke:#333,stroke-width:2px
-    style ProfileLambda fill:#bfb,stroke:#333,stroke-width:2px
-    style ArticleLambda fill:#bfb,stroke:#333,stroke-width:2px
-    style EventBridge fill:#fbb,stroke:#333,stroke-width:2px
-    style SNS fill:#fbb,stroke:#333,stroke-width:2px
-    style SQS fill:#fbb,stroke:#333,stroke-width:2px
-    style DynamoDB fill:#ff9,stroke:#333,stroke-width:2px
-    style S3 fill:#ff9,stroke:#333,stroke-width:2px
-    style Cognito fill:#f96,stroke:#333,stroke-width:2px
+    style Client fill:#f69,stroke:#333,stroke-width:2px
+    style AppSync fill:#66f,stroke:#fff,stroke-width:2px
+    style APIGateway fill:#66f,stroke:#fff,stroke-width:2px
+    style AuthLambda fill:#6b6,stroke:#333,stroke-width:2px
+    style ProfileLambda fill:#6b6,stroke:#333,stroke-width:2px
+    style ArticleLambda fill:#6b6,stroke:#333,stroke-width:2px
+    style EventBridge fill:#f66,stroke:#333,stroke-width:2px
+    style SNS fill:#f66,stroke:#333,stroke-width:2px
+    style SQS fill:#f66,stroke:#333,stroke-width:2px
+    style DynamoDB fill:#ff6,stroke:#333,stroke-width:2px
+    style S3 fill:#ff6,stroke:#333,stroke-width:2px
+    style Cognito fill:#f60,stroke:#fff,stroke-width:2px
 ```
 
 
