@@ -4,6 +4,8 @@
 
 ## 레거시 아키텍처
 
+> 레거시 아키텍처에 대한 자세한 설계 문서는 [legacy-design](./legacy-design) 디렉토리에서 확인할 수 있습니다.
+
 ```mermaid
 flowchart TD
     Client["Angular 클라이언트 애플리케이션"]
