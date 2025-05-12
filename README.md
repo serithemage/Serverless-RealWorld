@@ -9,14 +9,14 @@ flowchart TD
     Client["Angular 클라이언트 애플리케이션"]
     
     subgraph "API 레이어"
-        Gateway["컨지스트 게이트웨이\n(API 게이트웨이)"]
+        Gateway["컨지스트 게이트웨이(API 게이트웨이)"]
         GraphQL["GraphQL API"]
     end
     
     subgraph "마이크로서비스 레이어"
-        AuthService["인증 서비스\n(NestJS)"]
-        ProfileService["프로필 서비스\n(NestJS)"]
-        ArticleService["게시글 서비스\n(NestJS)"]
+        AuthService["인증 서비스(NestJS)"]
+        ProfileService["프로필 서비스(NestJS)"]
+        ArticleService["게시글 서비스(NestJS)"]
     end
     
     subgraph "통신 레이어"
@@ -67,14 +67,14 @@ flowchart TD
     Client["Angular 클라이언트 애플리케이션"]
     
     subgraph "API 레이어"
-        AppSync["AWS AppSync\n(GraphQL API)"]
-        APIGateway["API Gateway\n(REST API)"]
+        AppSync["AWS AppSync(GraphQL API)"]
+        APIGateway["API Gateway(REST API)"]
     end
     
     subgraph "서비스 레이어"
-        AuthLambda["인증 서비스\n(Lambda)"]
-        ProfileLambda["프로필 서비스\n(Lambda)"]
-        ArticleLambda["게시글 서비스\n(Lambda)"]
+        AuthLambda["인증 서비스(Lambda)"]
+        ProfileLambda["프로필 서비스(Lambda)"]
+        ArticleLambda["게시글 서비스(Lambda)"]
     end
     
     subgraph "통신 레이어"
@@ -85,7 +85,7 @@ flowchart TD
     
     subgraph "데이터 레이어"
         DynamoDB["Amazon DynamoDB"]
-        S3["Amazon S3\n(파일 저장)"]
+        S3["Amazon S3(파일 저장)"]
     end
     
     subgraph "인증 레이어"
