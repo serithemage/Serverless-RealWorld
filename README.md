@@ -80,9 +80,7 @@ flowchart TD
     end
     
     subgraph "통신 레이어"
-        EventBridge["AWS EventBridge"]
-        SNS["Amazon SNS"]
-        SQS["Amazon SQS"]
+        FIFOSQS["Amazon SQS FIFO"]
     end
     
     subgraph "데이터 레이어"
@@ -109,16 +107,14 @@ flowchart TD
     AuthLambda --> DynamoDB
     
     ProfileLambda --> DynamoDB
-    ProfileLambda --> EventBridge
+    ProfileLambda --> FIFOSQS
     
     ArticleLambda --> DynamoDB
     ArticleLambda --> S3
-    ArticleLambda --> EventBridge
+    ArticleLambda --> FIFOSQS
     
-    EventBridge --> SNS
-    SNS --> SQS
-    SQS --> ProfileLambda
-    SQS --> ArticleLambda
+    FIFOSQS --> ProfileLambda
+    FIFOSQS --> ArticleLambda
     
     style Client fill:#f69,stroke:#333,stroke-width:2px
     style AppSync fill:#66f,stroke:#fff,stroke-width:2px
@@ -126,9 +122,7 @@ flowchart TD
     style AuthLambda fill:#6b6,stroke:#333,stroke-width:2px
     style ProfileLambda fill:#6b6,stroke:#333,stroke-width:2px
     style ArticleLambda fill:#6b6,stroke:#333,stroke-width:2px
-    style EventBridge fill:#f66,stroke:#333,stroke-width:2px
-    style SNS fill:#f66,stroke:#333,stroke-width:2px
-    style SQS fill:#f66,stroke:#333,stroke-width:2px
+    style FIFOSQS fill:#f66,stroke:#333,stroke-width:2px
     style DynamoDB fill:#ff6,stroke:#333,stroke-width:2px
     style S3 fill:#ff6,stroke:#333,stroke-width:2px
     style Cognito fill:#f60,stroke:#fff,stroke-width:2px
@@ -142,7 +136,7 @@ flowchart TD
 - **서버리스 아키텍처 전환**: 기존 NestJS 마이크로서비스에서 AWS Lambda 기반 서버리스 아키텍처로 전환
 - **인프라 자동화**: AWS CDK(TypeScript)를 활용한 인프라 정의 및 배포 자동화
 - **데이터 저장소 변경**: Cassandra DB에서 Amazon DynamoDB로 데이터 저장소 마이그레이션
-- **서비스 간 통신 개선**: Kafka에서 AWS EventBridge, SNS/SQS로 이벤트 기반 통신 구현
+- **서비스 간 통신 개선**: Kafka에서 Amazon SQS FIFO로 이벤트 기반 통신 구현
 - **사용자 경험 유지**: 기존 Angular 클라이언트 애플리케이션과의 호환성 유지
 
 ## 기술 스택
@@ -158,7 +152,7 @@ flowchart TD
 - **프론트엔드**: Angular (기존 유지)
 - **백엔드**: AWS Lambda (TypeScript)
 - **API**: AWS AppSync (GraphQL), API Gateway (REST)
-- **메시징**: AWS EventBridge, SNS/SQS
+- **메시징**: Amazon SQS FIFO
 - **데이터베이스**: Amazon DynamoDB
 - **인증**: Amazon Cognito, JWT
 - **인프라**: AWS CDK (TypeScript), CloudFormation
