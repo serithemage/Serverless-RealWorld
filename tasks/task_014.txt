@@ -1,0 +1,26 @@
+# Task ID: 14
+# Title: S3 and CloudFront Setup for Frontend Hosting
+# Status: pending
+# Dependencies: 2
+# Priority: medium
+# Description: Set up S3 bucket and CloudFront distribution for hosting the Angular frontend application
+# Details:
+1. Create S3 bucket for static website hosting
+2. Configure bucket policies and CORS settings
+3. Set up CloudFront distribution with:
+   - Custom domain
+   - SSL certificate
+   - Cache behaviors
+   - Origin access identity
+4. Configure error pages
+5. Set up CloudFront functions or Lambda@Edge if needed
+6. Implement CI/CD for frontend deployment
+7. Configure cache invalidation strategy
+
+# Test Strategy:
+1. Verify S3 bucket configuration
+2. Test CloudFront distribution
+3. Validate SSL configuration
+4. Test custom domain
+5. Verify cache behaviors
+6. Test frontend deployment process

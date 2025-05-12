@@ -1,0 +1,20 @@
+# Task ID: 2
+# Title: Core Infrastructure Stack Implementation
+# Status: pending
+# Dependencies: 1
+# Priority: high
+# Description: Implement the core infrastructure stack including VPC, security groups, and IAM roles/policies
+# Details:
+1. Define VPC with public and private subnets across multiple AZs
+2. Create security groups for different service components
+3. Define IAM roles and policies for Lambda functions with least privilege principle
+4. Set up CloudWatch log groups for centralized logging
+5. Configure network ACLs and route tables
+6. Implement VPC endpoints for AWS services to improve security and performance
+7. Create reusable constructs for common infrastructure patterns
+
+# Test Strategy:
+1. Unit test the stack definition
+2. Validate IAM policies using policy simulator
+3. Deploy to development environment and verify resources
+4. Run infrastructure validation tests to ensure connectivity between components

@@ -1,0 +1,1202 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "AWS CDK Project Setup",
+      "description": "Initialize AWS CDK project with TypeScript and set up the basic infrastructure structure",
+      "details": "1. Install AWS CDK globally: `npm install -g aws-cdk`\n2. Create a new CDK project: `cdk init app --language typescript`\n3. Set up project structure with folders for each service component (auth, api, services)\n4. Configure AWS profiles and environments (dev, test, prod)\n5. Create base stack with shared resources\n6. Implement environment-specific configuration\n\nExample stack structure:\n```typescript\nimport * as cdk from 'aws-cdk-lib';\nimport { Construct } from 'constructs';\n\nexport class ServerlessRealWorldStack extends cdk.Stack {\n  constructor(scope: Construct, id: string, props?: cdk.StackProps) {\n    super(scope, id, props);\n    \n    // Define base infrastructure here\n  }\n}\n```",
+      "testStrategy": "1. Verify CDK synthesis works without errors: `cdk synth`\n2. Validate stack with: `cdk diff`\n3. Run unit tests for stack definitions\n4. Ensure proper environment configuration loading",
+      "priority": "high",
+      "dependencies": [],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Install Prerequisites",
+          "description": "Install the necessary tools and dependencies required for AWS CDK development",
+          "dependencies": [],
+          "details": "Install Node.js and npm, AWS CLI, and the AWS CDK CLI using 'npm install -g aws-cdk'. Verify installation with 'cdk --version'. Ensure Python is installed if using Python as the programming language.",
+          "status": "pending"
+        },
+        {
+          "id": 2,
+          "title": "Configure AWS Credentials",
+          "description": "Set up AWS credentials to allow CDK to interact with your AWS account",
+          "dependencies": [
+            1
+          ],
+          "details": "Configure AWS CLI with your credentials using 'aws configure'. Specify your AWS access key, secret key, default region, and output format. This will create necessary configuration files in your home directory.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Initialize CDK Project",
+          "description": "Create and set up a new CDK project with the desired programming language",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Create a new directory for your project. Run 'cdk init sample-app --language python' (or your preferred language) in an empty directory. This creates the project structure with sample code. For Python projects, activate the virtual environment and install dependencies with 'pip install -r requirements.txt'.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Bootstrap AWS Environment",
+          "description": "Prepare your AWS environment for CDK deployments by creating necessary resources",
+          "dependencies": [
+            2,
+            3
+          ],
+          "details": "Run 'cdk bootstrap' from the root of your CDK project. This creates required resources like S3 buckets for assets, ECR repositories for Docker images, and IAM roles for deployment permissions within a CloudFormation stack named CDKToolkit.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Customize Project Structure and Base Stack",
+          "description": "Modify the generated code to create your base infrastructure stack",
+          "dependencies": [
+            3,
+            4
+          ],
+          "details": "Review and modify the generated stack file (e.g., hello_cdk_stack.py). Define your infrastructure resources using CDK constructs. Organize your code into logical components. Update the app.py file to reference your stack and specify deployment environment parameters.",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Core Infrastructure Provisioning",
+      "description": "Set up core AWS infrastructure including VPC, security groups, IAM roles, and policies",
+      "details": "1. Define VPC with public and private subnets\n2. Create security groups for Lambda functions and other resources\n3. Define IAM roles and policies for services\n4. Set up CloudWatch log groups\n\n```typescript\nimport * as ec2 from 'aws-cdk-lib/aws-ec2';\nimport * as iam from 'aws-cdk-lib/aws-iam';\n\n// VPC setup\nconst vpc = new ec2.Vpc(this, 'ServerlessVPC', {\n  maxAzs: 2,\n  natGateways: 1\n});\n\n// Lambda security group\nconst lambdaSG = new ec2.SecurityGroup(this, 'LambdaSecurityGroup', {\n  vpc,\n  description: 'Security group for Lambda functions',\n  allowAllOutbound: true\n});\n\n// Lambda execution role\nconst lambdaRole = new iam.Role(this, 'LambdaExecutionRole', {\n  assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),\n  managedPolicies: [\n    iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaVPCAccessExecutionRole'),\n    iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')\n  ]\n});\n```",
+      "testStrategy": "1. Validate infrastructure with CDK diff and synth\n2. Deploy to development environment and verify resource creation\n3. Test network connectivity within VPC\n4. Verify IAM permissions with policy simulator",
+      "priority": "high",
+      "dependencies": [
+        1
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Provision VPC",
+          "description": "Create a Virtual Private Cloud (VPC) with appropriate CIDR blocks and basic configuration as the foundational network layer.",
+          "dependencies": [],
+          "details": "Define the VPC using infrastructure as code, ensuring deterministic and repeatable deployment. Consider best practices for modularization and source control.",
+          "status": "pending"
+        },
+        {
+          "id": 2,
+          "title": "Configure Subnets",
+          "description": "Set up public and private subnets within the VPC, assigning appropriate CIDR ranges and availability zones.",
+          "dependencies": [
+            1
+          ],
+          "details": "Ensure subnets are logically separated for security and scalability. Follow best practices for high availability and future scalability.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Create Security Groups",
+          "description": "Define security groups to control inbound and outbound traffic for resources within the VPC.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Implement least privilege rules, disable unnecessary ports, and ensure no public access unless explicitly required.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Set Up IAM Roles and Policies",
+          "description": "Create IAM roles and policies to manage permissions for resources and users interacting with the infrastructure.",
+          "dependencies": [],
+          "details": "Use modular, reusable IAM definitions. Store policies in source control and automate testing for least privilege compliance.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Provision CloudWatch Log Groups",
+          "description": "Create CloudWatch log groups for centralized logging and monitoring of infrastructure components.",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "details": "Ensure log groups are configured for retention, encryption, and access control. Integrate with other AWS services as needed.",
+          "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "Validate and Test Infrastructure",
+          "description": "Perform validation and automated testing to ensure all components are correctly provisioned and configured.",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "details": "Automate tests for network connectivity, security group rules, IAM permissions, and log group functionality. Use CI/CD pipelines for continuous validation and drift detection.",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "DynamoDB Tables Design and Creation",
+      "description": "Design and implement DynamoDB tables to replace existing Cassandra database, with appropriate indexes and access patterns",
+      "details": "1. Analyze existing Cassandra schema and access patterns\n2. Design DynamoDB tables with appropriate partition and sort keys\n3. Define Global Secondary Indexes (GSIs) for query optimization\n4. Implement DynamoDB tables using CDK\n\n```typescript\nimport * as dynamodb from 'aws-cdk-lib/aws-dynamodb';\n\n// Users table\nconst usersTable = new dynamodb.Table(this, 'UsersTable', {\n  partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING },\n  billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,\n  removalPolicy: cdk.RemovalPolicy.RETAIN\n});\n\n// Add GSI for email lookup\nusersTable.addGlobalSecondaryIndex({\n  indexName: 'email-index',\n  partitionKey: { name: 'email', type: dynamodb.AttributeType.STRING },\n  projectionType: dynamodb.ProjectionType.ALL\n});\n\n// Articles table\nconst articlesTable = new dynamodb.Table(this, 'ArticlesTable', {\n  partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING },\n  sortKey: { name: 'createdAt', type: dynamodb.AttributeType.STRING },\n  billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,\n  removalPolicy: cdk.RemovalPolicy.RETAIN\n});\n\n// Add GSI for author lookup\narticlesTable.addGlobalSecondaryIndex({\n  indexName: 'author-index',\n  partitionKey: { name: 'authorId', type: dynamodb.AttributeType.STRING },\n  sortKey: { name: 'createdAt', type: dynamodb.AttributeType.STRING },\n  projectionType: dynamodb.ProjectionType.ALL\n});\n```",
+      "testStrategy": "1. Create test cases for each access pattern\n2. Validate table designs with sample queries\n3. Test GSI performance with representative data\n4. Verify throughput and capacity settings",
+      "priority": "high",
+      "dependencies": [
+        2
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Schema Analysis and Access Pattern Identification",
+          "description": "Analyze existing data schema and identify all required access patterns for the DynamoDB implementation",
+          "dependencies": [],
+          "details": "Evaluate current data structure and identify how data is accessed. Document all query patterns that need to be supported. This is critical as DynamoDB table design must be driven by access patterns rather than normalized data structure.",
+          "status": "pending"
+        },
+        {
+          "id": 2,
+          "title": "Single-Table Design Planning",
+          "description": "Create a comprehensive single-table design that accommodates all identified access patterns",
+          "dependencies": [
+            1
+          ],
+          "details": "Design a denormalized data model that combines multiple entities into a single table. Define primary key structure (partition and sort keys) that will support efficient queries while avoiding hot keys. Create entity relationship diagrams showing how different data types will coexist in the single table.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Secondary Index Design",
+          "description": "Design necessary Global Secondary Indexes (GSIs) and Local Secondary Indexes (LSIs) to support additional access patterns",
+          "dependencies": [
+            2
+          ],
+          "details": "Identify which access patterns cannot be efficiently served by the primary key structure. Design appropriate secondary indexes with careful consideration of attribute projections to minimize costs while supporting all required query patterns.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "CDK Table Implementation",
+          "description": "Implement the DynamoDB table definition using AWS CDK with appropriate configuration",
+          "dependencies": [
+            2,
+            3
+          ],
+          "details": "Create CDK code to define the DynamoDB table with proper capacity mode (on-demand or provisioned), auto-scaling settings if applicable, and appropriate table class selection. Implement all secondary indexes as defined in the previous phase.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Data Migration Planning",
+          "description": "Develop a comprehensive migration strategy to move data from Cassandra to DynamoDB",
+          "dependencies": [
+            4
+          ],
+          "details": "Create a migration plan that includes data transformation logic to convert from Cassandra's data model to the new DynamoDB structure. Consider strategies for handling large attributes (compression or S3 storage) and plan for validation of migrated data.",
+          "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "Access Pattern Validation",
+          "description": "Implement and test all access patterns against the DynamoDB table design",
+          "dependencies": [
+            4
+          ],
+          "details": "Create test cases for each identified access pattern. Implement query code using the AWS SDK and validate that each pattern works efficiently. Verify that no patterns require table scans or other inefficient operations.",
+          "status": "pending"
+        },
+        {
+          "id": 7,
+          "title": "Performance Testing and Optimization",
+          "description": "Conduct load testing and optimize the DynamoDB implementation for performance and cost",
+          "dependencies": [
+            5,
+            6
+          ],
+          "details": "Perform load testing to identify potential bottlenecks or hot partitions. Optimize partition key distribution if needed. Evaluate costs and make adjustments to capacity mode, auto-scaling settings, or table class selection to balance performance and cost efficiency.",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Cognito User Pool Setup",
+      "description": "Configure Amazon Cognito user pool for authentication and user management",
+      "details": "1. Create Cognito User Pool with appropriate settings\n2. Configure password policies and MFA options\n3. Set up app clients for different environments\n4. Define custom attributes to match existing user model\n5. Configure email verification and user invitation workflows\n\n```typescript\nimport * as cognito from 'aws-cdk-lib/aws-cognito';\n\nconst userPool = new cognito.UserPool(this, 'UserPool', {\n  userPoolName: 'serverless-realworld-users',\n  selfSignUpEnabled: true,\n  autoVerify: { email: true },\n  standardAttributes: {\n    email: { required: true, mutable: true },\n    fullname: { required: false, mutable: true }\n  },\n  customAttributes: {\n    'bio': new cognito.StringAttribute({ mutable: true }),\n    'image': new cognito.StringAttribute({ mutable: true })\n  },\n  passwordPolicy: {\n    minLength: 8,\n    requireLowercase: true,\n    requireUppercase: true,\n    requireDigits: true,\n    requireSymbols: false\n  },\n  accountRecovery: cognito.AccountRecovery.EMAIL_ONLY,\n  removalPolicy: cdk.RemovalPolicy.RETAIN\n});\n\nconst userPoolClient = new cognito.UserPoolClient(this, 'UserPoolClient', {\n  userPool,\n  authFlows: {\n    userPassword: true,\n    userSrp: true\n  },\n  generateSecret: false\n});\n```",
+      "testStrategy": "1. Test user registration flow\n2. Verify email verification process\n3. Test authentication with username/password\n4. Validate password policies\n5. Test user attribute updates",
+      "priority": "high",
+      "dependencies": [
+        2
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create Cognito User Pool",
+          "description": "Set up a new Amazon Cognito user pool using the AWS Console or CLI, specifying the pool name and initial configuration.",
+          "dependencies": [],
+          "details": "This includes selecting the region, naming the pool, and choosing basic settings such as sign-in options (username, email, or phone number).",
+          "status": "pending"
+        },
+        {
+          "id": 2,
+          "title": "Configure Password Policy and MFA",
+          "description": "Define password complexity requirements and configure Multi-Factor Authentication (MFA) settings for the user pool.",
+          "dependencies": [
+            1
+          ],
+          "details": "Set minimum password length, character requirements, and enable or enforce MFA (SMS, TOTP, etc.) as needed for security compliance.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Set Up App Clients",
+          "description": "Create and configure app clients for the user pool, specifying authentication flows, callback URLs, and token settings.",
+          "dependencies": [
+            1
+          ],
+          "details": "Configure public or confidential clients, set allowed OAuth flows, define callback and sign-out URLs, and adjust token expiration settings.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Define Custom Attributes",
+          "description": "Add custom user attributes to the user pool schema to support application-specific user data requirements.",
+          "dependencies": [
+            1
+          ],
+          "details": "Specify attribute names, data types, and whether they are required or mutable. Ensure alignment with the application's user model.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Configure Email Workflow",
+          "description": "Set up email verification, invitation, and notification workflows, including sender email address and message templates.",
+          "dependencies": [
+            1
+          ],
+          "details": "Configure SES integration if needed, customize email subject and body templates, and set up verification and invitation message triggers.",
+          "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "Apply Environment-Specific Settings",
+          "description": "Adjust pool, client, and workflow configurations for different environments (development, staging, production).",
+          "dependencies": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "details": "Ensure environment-specific variables such as callback URLs, email sender addresses, and security policies are correctly set for each deployment environment.",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Authentication Lambda Functions",
+      "description": "Implement Lambda functions for user authentication, registration, and JWT token handling",
+      "details": "1. Create Lambda functions for user registration, login, and token verification\n2. Implement JWT token generation and validation\n3. Set up integration with Cognito User Pool\n4. Implement password hashing and verification logic\n\n```typescript\nimport * as lambda from 'aws-cdk-lib/aws-lambda';\nimport * as nodejs from 'aws-cdk-lib/aws-lambda-nodejs';\n\n// Registration Lambda\nconst registerLambda = new nodejs.NodejsFunction(this, 'RegisterFunction', {\n  runtime: lambda.Runtime.NODEJS_18_X,\n  entry: 'src/auth/register.ts',\n  handler: 'handler',\n  environment: {\n    USER_POOL_ID: userPool.userPoolId,\n    CLIENT_ID: userPoolClient.userPoolClientId\n  }\n});\n\n// Login Lambda\nconst loginLambda = new nodejs.NodejsFunction(this, 'LoginFunction', {\n  runtime: lambda.Runtime.NODEJS_18_X,\n  entry: 'src/auth/login.ts',\n  handler: 'handler',\n  environment: {\n    USER_POOL_ID: userPool.userPoolId,\n    CLIENT_ID: userPoolClient.userPoolClientId\n  }\n});\n\n// Token verification Lambda\nconst verifyTokenLambda = new nodejs.NodejsFunction(this, 'VerifyTokenFunction', {\n  runtime: lambda.Runtime.NODEJS_18_X,\n  entry: 'src/auth/verify-token.ts',\n  handler: 'handler',\n  environment: {\n    USER_POOL_ID: userPool.userPoolId\n  }\n});\n\n// Grant permissions\nuserPool.grant(registerLambda, 'cognito-idp:AdminCreateUser', 'cognito-idp:AdminSetUserPassword');\nuserPool.grant(loginLambda, 'cognito-idp:AdminInitiateAuth', 'cognito-idp:AdminRespondToAuthChallenge');\n```\n\nImplementation for login.ts:\n```typescript\nimport { CognitoIdentityProviderClient, AdminInitiateAuthCommand } from '@aws-sdk/client-cognito-identity-provider';\nimport { sign } from 'jsonwebtoken';\n\nconst cognito = new CognitoIdentityProviderClient();\n\nexport const handler = async (event) => {\n  const { email, password } = JSON.parse(event.body);\n  \n  try {\n    const authResponse = await cognito.send(new AdminInitiateAuthCommand({\n      UserPoolId: process.env.USER_POOL_ID,\n      ClientId: process.env.CLIENT_ID,\n      AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',\n      AuthParameters: {\n        USERNAME: email,\n        PASSWORD: password\n      }\n    }));\n    \n    // Generate JWT token\n    const token = sign(\n      { sub: authResponse.AuthenticationResult.AccessToken },\n      'your-secret-key',\n      { expiresIn: '1d' }\n    );\n    \n    return {\n      statusCode: 200,\n      body: JSON.stringify({ token })\n    };\n  } catch (error) {\n    return {\n      statusCode: 401,\n      body: JSON.stringify({ message: 'Authentication failed' })\n    };\n  }\n};\n```",
+      "testStrategy": "1. Unit test each Lambda function with mock Cognito responses\n2. Test registration flow with valid and invalid inputs\n3. Test login with correct and incorrect credentials\n4. Verify JWT token generation and validation\n5. Test token expiration and refresh flows",
+      "priority": "high",
+      "dependencies": [
+        4
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Design Registration Lambda Function",
+          "description": "Develop a Lambda function to handle user registration, including input validation, password hashing, and storing user data securely.",
+          "dependencies": [],
+          "details": "Ensure the function integrates with Cognito for user pool creation and triggers, and applies password security best practices.",
+          "status": "pending"
+        },
+        {
+          "id": 2,
+          "title": "Implement Login Lambda Function",
+          "description": "Create a Lambda function to authenticate users during login, verifying credentials and generating JWTs upon successful authentication.",
+          "dependencies": [
+            1
+          ],
+          "details": "Integrate with Cognito for authentication and ensure secure handling of user credentials.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Develop Token Verification Lambda",
+          "description": "Build a Lambda function to verify JWT tokens, ensuring their validity, expiration, and signature integrity.",
+          "dependencies": [
+            2
+          ],
+          "details": "Use Cognito's public keys for JWT verification and handle token parsing and validation logic.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Integrate JWT Handling Logic",
+          "description": "Implement logic for issuing, refreshing, and invalidating JWTs within Lambda functions, ensuring secure token lifecycle management.",
+          "dependencies": [
+            2
+          ],
+          "details": "Coordinate with Cognito for token issuance and revocation, and manage token claims as needed.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Set Up Cognito Integration",
+          "description": "Configure AWS Cognito user pools and triggers to work seamlessly with Lambda functions for registration, login, and token management.",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "details": "Ensure proper user pool configuration, Lambda triggers, and secure communication between services.",
+          "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "Implement Password Security Measures",
+          "description": "Apply strong password policies, hashing algorithms, and secure storage practices within Lambda and Cognito integration.",
+          "dependencies": [
+            1,
+            5
+          ],
+          "details": "Enforce password complexity, use salted hashes, and ensure compliance with security standards.",
+          "status": "pending"
+        },
+        {
+          "id": 7,
+          "title": "Configure Permissions and Authorization",
+          "description": "Set up fine-grained permissions using Lambda authorizers and Cognito roles to control access to resources based on user roles and claims.",
+          "dependencies": [
+            3,
+            5
+          ],
+          "details": "Implement custom Lambda authorizers with API Gateway, generate IAM policies, and test access control flows.",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "API Gateway Setup",
+      "description": "Configure AWS API Gateway for REST endpoints and integrate with Lambda functions",
+      "details": "1. Create REST API in API Gateway\n2. Define resources and methods for authentication and other endpoints\n3. Set up request/response models\n4. Configure CORS settings\n5. Implement authorization with Cognito User Pool\n\n```typescript\nimport * as apigateway from 'aws-cdk-lib/aws-apigateway';\n\n// Create API Gateway\nconst api = new apigateway.RestApi(this, 'RealWorldApi', {\n  restApiName: 'Serverless RealWorld API',\n  description: 'API for Serverless RealWorld application',\n  defaultCorsPreflightOptions: {\n    allowOrigins: apigateway.Cors.ALL_ORIGINS,\n    allowMethods: apigateway.Cors.ALL_METHODS,\n    allowHeaders: [\n      'Content-Type',\n      'X-Amz-Date',\n      'Authorization',\n      'X-Api-Key',\n      'X-Amz-Security-Token'\n    ]\n  }\n});\n\n// Cognito authorizer\nconst authorizer = new apigateway.CognitoUserPoolsAuthorizer(this, 'ApiAuthorizer', {\n  cognitoUserPools: [userPool]\n});\n\n// Auth endpoints\nconst authResource = api.root.addResource('auth');\nconst registerResource = authResource.addResource('register');\nregisterResource.addMethod('POST', new apigateway.LambdaIntegration(registerLambda));\n\nconst loginResource = authResource.addResource('login');\nloginResource.addMethod('POST', new apigateway.LambdaIntegration(loginLambda));\n\n// Protected endpoints example\nconst usersResource = api.root.addResource('user');\nusersResource.addMethod('GET', new apigateway.LambdaIntegration(getUserLambda), {\n  authorizer,\n  authorizationType: apigateway.AuthorizationType.COGNITO\n});\n```",
+      "testStrategy": "1. Test API endpoints with Postman or similar tool\n2. Verify CORS configuration with cross-origin requests\n3. Test authorization with valid and invalid tokens\n4. Validate request/response models\n5. Test rate limiting and throttling settings",
+      "priority": "high",
+      "dependencies": [
+        2,
+        5
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "API Creation in API Gateway",
+          "description": "Set up a new REST API in API Gateway to serve as the entry point for client requests.",
+          "dependencies": [],
+          "details": "Use the API Gateway console to create a new REST API, specifying the API name, description, and endpoint type as needed.",
+          "status": "pending"
+        },
+        {
+          "id": 2,
+          "title": "Resource and Method Definition",
+          "description": "Define resources (paths) and HTTP methods (GET, POST, etc.) for the API.",
+          "dependencies": [
+            1
+          ],
+          "details": "Add resources representing endpoints (e.g., /items, /users) and attach HTTP methods to each resource according to the API design.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Lambda Integration Setup",
+          "description": "Integrate API methods with AWS Lambda functions to handle backend logic.",
+          "dependencies": [
+            2
+          ],
+          "details": "Configure each method to use Lambda Proxy integration, select the appropriate Lambda function, and grant API Gateway permission to invoke the function[1][5].",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "CORS Configuration",
+          "description": "Enable and configure Cross-Origin Resource Sharing (CORS) for API resources and methods.",
+          "dependencies": [
+            2
+          ],
+          "details": "Set up CORS headers (Access-Control-Allow-Origin, etc.) on relevant methods to allow cross-origin requests from browsers.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Request and Response Modeling",
+          "description": "Define models and mapping templates for request and response payloads.",
+          "dependencies": [
+            3
+          ],
+          "details": "Create models to validate and transform incoming requests and outgoing responses, ensuring data consistency and proper integration with Lambda.",
+          "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "Cognito Authorizer Setup",
+          "description": "Configure Amazon Cognito as an authorizer to secure API endpoints.",
+          "dependencies": [
+            1
+          ],
+          "details": "Set up a Cognito user pool and configure API Gateway to use it as an authorizer for selected methods, enforcing authentication and authorization[1][3].",
+          "status": "pending"
+        },
+        {
+          "id": 7,
+          "title": "Endpoint Testing and Validation",
+          "description": "Test the API endpoints to verify correct integration, security, and data flow.",
+          "dependencies": [
+            3,
+            4,
+            5,
+            6
+          ],
+          "details": "Use the API Gateway console's test feature or external tools (e.g., curl, Postman) to send requests, validate responses, and ensure CORS and Cognito authorizer are functioning as expected[1][5].",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "AppSync GraphQL API Implementation",
+      "description": "Set up AWS AppSync for GraphQL API and implement schema and resolvers",
+      "details": "1. Define GraphQL schema based on existing API contracts\n2. Create AppSync API with CDK\n3. Implement resolvers for queries and mutations\n4. Set up data sources (Lambda, DynamoDB)\n5. Configure authentication with Cognito\n\n```typescript\nimport * as appsync from 'aws-cdk-lib/aws-appsync';\n\n// Create AppSync API\nconst api = new appsync.GraphqlApi(this, 'RealWorldGraphQLApi', {\n  name: 'RealWorldGraphQLApi',\n  schema: appsync.SchemaFile.fromAsset('schema/schema.graphql'),\n  authorizationConfig: {\n    defaultAuthorization: {\n      authorizationType: appsync.AuthorizationType.USER_POOL,\n      userPoolConfig: {\n        userPool\n      }\n    },\n    additionalAuthorizationModes: [\n      {\n        authorizationType: appsync.AuthorizationType.API_KEY,\n        apiKeyConfig: {\n          expires: cdk.Expiration.after(cdk.Duration.days(365))\n        }\n      }\n    ]\n  }\n});\n\n// DynamoDB as data source\nconst usersTableDataSource = api.addDynamoDbDataSource('UsersTableDataSource', usersTable);\nconst articlesTableDataSource = api.addDynamoDbDataSource('ArticlesTableDataSource', articlesTable);\n\n// Lambda as data source\nconst profileLambdaDataSource = api.addLambdaDataSource('ProfileLambdaDataSource', profileLambda);\n\n// Create resolvers\nusersTableDataSource.createResolver({\n  typeName: 'Query',\n  fieldName: 'getUser',\n  requestMappingTemplate: appsync.MappingTemplate.dynamoDbGetItem('id', 'id'),\n  responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()\n});\n\narticlesTableDataSource.createResolver({\n  typeName: 'Query',\n  fieldName: 'getArticles',\n  requestMappingTemplate: appsync.MappingTemplate.dynamoDbScanTable(),\n  responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultList()\n});\n```\n\nExample schema.graphql:\n```graphql\ntype User {\n  id: ID!\n  email: String!\n  username: String!\n  bio: String\n  image: String\n}\n\ntype Article {\n  id: ID!\n  slug: String!\n  title: String!\n  description: String!\n  body: String!\n  tagList: [String!]\n  createdAt: String!\n  updatedAt: String!\n  favorited: Boolean!\n  favoritesCount: Int!\n  author: User!\n}\n\ntype Query {\n  getUser(id: ID!): User\n  getArticles: [Article!]!\n  getArticle(slug: String!): Article\n}\n\ntype Mutation {\n  createUser(email: String!, username: String!, password: String!): User\n  updateUser(bio: String, image: String): User\n  createArticle(title: String!, description: String!, body: String!, tagList: [String!]): Article\n}\n```",
+      "testStrategy": "1. Test GraphQL schema with validation tools\n2. Verify resolver functionality with sample queries\n3. Test authentication and authorization\n4. Validate error handling and response formatting\n5. Performance test with complex queries",
+      "priority": "medium",
+      "dependencies": [
+        3,
+        5
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "GraphQL Schema Design",
+          "description": "Define the GraphQL schema with types, queries, mutations, and subscriptions",
+          "dependencies": [],
+          "details": "Create a schema that defines the structure of your API including object types, input types, query operations, mutation operations, and subscription operations. Consider the relationships between entities and how data will flow through your API.",
+          "status": "pending"
+        },
+        {
+          "id": 2,
+          "title": "AWS AppSync API Creation",
+          "description": "Set up the AppSync service and create a new GraphQL API",
+          "dependencies": [
+            1
+          ],
+          "details": "Use the AWS Management Console or AWS CLI to create a new AppSync API. Configure the API name, description, and select the appropriate runtime environment (JavaScript or VTL) for your resolvers.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Data Source Integration",
+          "description": "Connect and configure data sources for your API",
+          "dependencies": [
+            2
+          ],
+          "details": "Set up and connect your data sources such as DynamoDB tables, RDS databases, Elasticsearch domains, Lambda functions, or HTTP endpoints. Configure the necessary IAM roles and permissions for AppSync to access these resources.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Resolver Development",
+          "description": "Create and implement resolvers for schema fields",
+          "dependencies": [
+            1,
+            3
+          ],
+          "details": "Develop resolvers for your schema fields using either JavaScript (APPSYNC_JS) or Velocity Template Language (VTL). Implement request and response mapping templates that define how data is transformed between GraphQL operations and your data sources.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Authentication and Authorization Setup",
+          "description": "Configure security mechanisms for API access",
+          "dependencies": [
+            2
+          ],
+          "details": "Implement one or more authorization types including API keys, IAM permissions, Lambda authorizers, OpenID Connect, or Amazon Cognito User Pools. Define fine-grained access controls for different operations and user roles.",
+          "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "Query and Mutation Testing",
+          "description": "Test API operations to verify functionality",
+          "dependencies": [
+            4,
+            5
+          ],
+          "details": "Use the AppSync console or tools like Postman to test queries, mutations, and subscriptions. Verify that data is correctly retrieved, modified, and that real-time updates work as expected.",
+          "status": "pending"
+        },
+        {
+          "id": 7,
+          "title": "Error Handling Implementation",
+          "description": "Implement robust error handling in resolvers and client code",
+          "dependencies": [
+            4
+          ],
+          "details": "Add error handling logic to resolvers to gracefully manage exceptions from data sources. Implement client-side error handling for different error scenarios including network issues, authorization failures, and validation errors.",
+          "status": "pending"
+        },
+        {
+          "id": 8,
+          "title": "Performance Validation and Optimization",
+          "description": "Test API performance and optimize for production use",
+          "dependencies": [
+            6,
+            7
+          ],
+          "details": "Conduct load testing to validate API performance under expected traffic. Optimize resolver logic, implement caching strategies, and fine-tune data source configurations to improve response times and reduce costs.",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Profile Service Implementation",
+      "description": "Implement the profile microservice using Lambda and DynamoDB",
+      "details": "1. Create Lambda functions for profile CRUD operations\n2. Implement DynamoDB repository pattern for profile data\n3. Set up API Gateway endpoints for profile service\n4. Implement following/unfollowing functionality\n\n```typescript\nimport * as lambda from 'aws-cdk-lib/aws-lambda';\nimport * as nodejs from 'aws-cdk-lib/aws-lambda-nodejs';\n\n// Profile Lambda functions\nconst getProfileLambda = new nodejs.NodejsFunction(this, 'GetProfileFunction', {\n  runtime: lambda.Runtime.NODEJS_18_X,\n  entry: 'src/profile/get-profile.ts',\n  handler: 'handler',\n  environment: {\n    USERS_TABLE: usersTable.tableName\n  }\n});\n\nconst updateProfileLambda = new nodejs.NodejsFunction(this, 'UpdateProfileFunction', {\n  runtime: lambda.Runtime.NODEJS_18_X,\n  entry: 'src/profile/update-profile.ts',\n  handler: 'handler',\n  environment: {\n    USERS_TABLE: usersTable.tableName\n  }\n});\n\nconst followUserLambda = new nodejs.NodejsFunction(this, 'FollowUserFunction', {\n  runtime: lambda.Runtime.NODEJS_18_X,\n  entry: 'src/profile/follow-user.ts',\n  handler: 'handler',\n  environment: {\n    USERS_TABLE: usersTable.tableName\n  }\n});\n\n// Grant permissions\nusersTable.grantReadData(getProfileLambda);\nusersTable.grantReadWriteData(updateProfileLambda);\nusersTable.grantReadWriteData(followUserLambda);\n\n// API Gateway integration\nconst profileResource = api.root.addResource('profiles');\nconst usernameResource = profileResource.addResource('{username}');\nusernameResource.addMethod('GET', new apigateway.LambdaIntegration(getProfileLambda));\nusernameResource.addMethod('PUT', new apigateway.LambdaIntegration(updateProfileLambda), {\n  authorizer,\n  authorizationType: apigateway.AuthorizationType.COGNITO\n});\n\nconst followResource = usernameResource.addResource('follow');\nfollowResource.addMethod('POST', new apigateway.LambdaIntegration(followUserLambda), {\n  authorizer,\n  authorizationType: apigateway.AuthorizationType.COGNITO\n});\nfollowResource.addMethod('DELETE', new apigateway.LambdaIntegration(unfollowUserLambda), {\n  authorizer,\n  authorizationType: apigateway.AuthorizationType.COGNITO\n});\n```\n\nImplementation for get-profile.ts:\n```typescript\nimport { DynamoDBClient } from '@aws-sdk/client-dynamodb';\nimport { DynamoDBDocumentClient, GetCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';\n\nconst ddbClient = new DynamoDBClient();\nconst ddbDocClient = DynamoDBDocumentClient.from(ddbClient);\n\nexport const handler = async (event) => {\n  const username = event.pathParameters.username;\n  \n  try {\n    // Query user by username\n    const result = await ddbDocClient.send(new QueryCommand({\n      TableName: process.env.USERS_TABLE,\n      IndexName: 'username-index',\n      KeyConditionExpression: 'username = :username',\n      ExpressionAttributeValues: {\n        ':username': username\n      }\n    }));\n    \n    if (!result.Items || result.Items.length === 0) {\n      return {\n        statusCode: 404,\n        body: JSON.stringify({ message: 'Profile not found' })\n      };\n    }\n    \n    const user = result.Items[0];\n    const profile = {\n      username: user.username,\n      bio: user.bio || '',\n      image: user.image || '',\n      following: false // Determine following status based on current user\n    };\n    \n    return {\n      statusCode: 200,\n      body: JSON.stringify({ profile })\n    };\n  } catch (error) {\n    return {\n      statusCode: 500,\n      body: JSON.stringify({ message: 'Error retrieving profile' })\n    };\n  }\n};\n```",
+      "testStrategy": "1. Unit test Lambda functions with mock DynamoDB responses\n2. Test profile retrieval with valid and invalid usernames\n3. Test profile updates with authenticated users\n4. Verify following/unfollowing functionality\n5. Test authorization rules for protected operations",
+      "priority": "medium",
+      "dependencies": [
+        3,
+        5,
+        6
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Set Up DynamoDB Repository",
+          "description": "Create and configure a DynamoDB table to store user profiles and following relationships. Define the schema and indexes required for efficient queries.",
+          "dependencies": [],
+          "details": "This includes creating tables for profiles and a mapping for following/followers, and setting up necessary indexes for lookups.",
+          "status": "pending"
+        },
+        {
+          "id": 2,
+          "title": "Implement Lambda CRUD Functions",
+          "description": "Develop AWS Lambda functions for Create, Read, Update, and Delete operations on user profiles, ensuring each function interacts correctly with DynamoDB.",
+          "dependencies": [
+            1
+          ],
+          "details": "Each CRUD operation should be a separate Lambda function for modularity and easier maintenance.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Integrate Lambda Functions with API Gateway",
+          "description": "Configure API Gateway to route HTTP requests to the appropriate Lambda functions for each CRUD operation.",
+          "dependencies": [
+            2
+          ],
+          "details": "Set up RESTful endpoints and map HTTP methods (GET, POST, PUT, DELETE) to corresponding Lambda functions.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Implement Following/Unfollowing Logic",
+          "description": "Add Lambda functions and DynamoDB operations to handle following and unfollowing between user profiles.",
+          "dependencies": [
+            1,
+            2,
+            3
+          ],
+          "details": "Ensure atomic updates to both the follower and following lists, and handle edge cases such as duplicate follows or unfollows.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Configure Permissions and IAM Roles",
+          "description": "Set up IAM roles and policies to grant Lambda functions the minimum required permissions to access DynamoDB and be invoked by API Gateway.",
+          "dependencies": [
+            2,
+            3,
+            4
+          ],
+          "details": "Follow the principle of least privilege and ensure secure integration between services.",
+          "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "Implement Error Handling",
+          "description": "Add robust error handling to all Lambda functions, including input validation, DynamoDB operation failures, and permission errors.",
+          "dependencies": [
+            2,
+            4,
+            5
+          ],
+          "details": "Return appropriate HTTP status codes and error messages for different failure scenarios.",
+          "status": "pending"
+        },
+        {
+          "id": 7,
+          "title": "Develop and Execute Testing Strategy",
+          "description": "Write and run tests for all Lambda functions and API endpoints, covering CRUD operations, following/unfollowing, permissions, and error cases.",
+          "dependencies": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "details": "Include unit tests, integration tests, and end-to-end tests using tools like Postman or automated test suites.",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Article Service Implementation",
+      "description": "Implement the article microservice using Lambda and DynamoDB",
+      "details": "1. Create Lambda functions for article CRUD operations\n2. Implement DynamoDB repository pattern for article data\n3. Set up API Gateway endpoints for article service\n4. Implement tagging, favoriting, and commenting functionality\n\n```typescript\nimport * as lambda from 'aws-cdk-lib/aws-lambda';\nimport * as nodejs from 'aws-cdk-lib/aws-lambda-nodejs';\n\n// Article Lambda functions\nconst getArticlesLambda = new nodejs.NodejsFunction(this, 'GetArticlesFunction', {\n  runtime: lambda.Runtime.NODEJS_18_X,\n  entry: 'src/article/get-articles.ts',\n  handler: 'handler',\n  environment: {\n    ARTICLES_TABLE: articlesTable.tableName\n  }\n});\n\nconst getArticleLambda = new nodejs.NodejsFunction(this, 'GetArticleFunction', {\n  runtime: lambda.Runtime.NODEJS_18_X,\n  entry: 'src/article/get-article.ts',\n  handler: 'handler',\n  environment: {\n    ARTICLES_TABLE: articlesTable.tableName\n  }\n});\n\nconst createArticleLambda = new nodejs.NodejsFunction(this, 'CreateArticleFunction', {\n  runtime: lambda.Runtime.NODEJS_18_X,\n  entry: 'src/article/create-article.ts',\n  handler: 'handler',\n  environment: {\n    ARTICLES_TABLE: articlesTable.tableName\n  }\n});\n\n// Grant permissions\narticlesTable.grantReadData(getArticlesLambda);\narticlesTable.grantReadData(getArticleLambda);\narticlesTable.grantReadWriteData(createArticleLambda);\n\n// API Gateway integration\nconst articlesResource = api.root.addResource('articles');\narticlesResource.addMethod('GET', new apigateway.LambdaIntegration(getArticlesLambda));\narticlesResource.addMethod('POST', new apigateway.LambdaIntegration(createArticleLambda), {\n  authorizer,\n  authorizationType: apigateway.AuthorizationType.COGNITO\n});\n\nconst articleResource = articlesResource.addResource('{slug}');\narticleResource.addMethod('GET', new apigateway.LambdaIntegration(getArticleLambda));\narticleResource.addMethod('PUT', new apigateway.LambdaIntegration(updateArticleLambda), {\n  authorizer,\n  authorizationType: apigateway.AuthorizationType.COGNITO\n});\narticleResource.addMethod('DELETE', new apigateway.LambdaIntegration(deleteArticleLambda), {\n  authorizer,\n  authorizationType: apigateway.AuthorizationType.COGNITO\n});\n```\n\nImplementation for create-article.ts:\n```typescript\nimport { DynamoDBClient } from '@aws-sdk/client-dynamodb';\nimport { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';\nimport { v4 as uuidv4 } from 'uuid';\nimport slugify from 'slugify';\n\nconst ddbClient = new DynamoDBClient();\nconst ddbDocClient = DynamoDBDocumentClient.from(ddbClient);\n\nexport const handler = async (event) => {\n  const { title, description, body, tagList = [] } = JSON.parse(event.body);\n  const userId = event.requestContext.authorizer.claims.sub;\n  \n  try {\n    const now = new Date().toISOString();\n    const id = uuidv4();\n    const slug = slugify(title, { lower: true }) + '-' + id.substring(0, 8);\n    \n    const article = {\n      id,\n      slug,\n      title,\n      description,\n      body,\n      tagList,\n      authorId: userId,\n      createdAt: now,\n      updatedAt: now,\n      favoritesCount: 0\n    };\n    \n    await ddbDocClient.send(new PutCommand({\n      TableName: process.env.ARTICLES_TABLE,\n      Item: article\n    }));\n    \n    return {\n      statusCode: 201,\n      body: JSON.stringify({ article })\n    };\n  } catch (error) {\n    return {\n      statusCode: 500,\n      body: JSON.stringify({ message: 'Error creating article' })\n    };\n  }\n};\n```",
+      "testStrategy": "1. Unit test Lambda functions with mock DynamoDB responses\n2. Test article creation with valid and invalid inputs\n3. Test article retrieval with various query parameters\n4. Verify slug generation and uniqueness\n5. Test authorization rules for article operations\n6. Test tagging and favoriting functionality",
+      "priority": "medium",
+      "dependencies": [
+        3,
+        5,
+        6
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Set up DynamoDB table for articles",
+          "description": "Create a DynamoDB table to store article data with appropriate attributes and indexes",
+          "dependencies": [],
+          "details": "Create a DynamoDB table with partition key 'id' and sort key 'slug'. Include GSIs for author lookup, tag filtering, and date-based sorting. Define attributes for title, description, body, tags, favorites count, and timestamps.",
+          "status": "pending"
+        },
+        {
+          "id": 2,
+          "title": "Implement Lambda function for article CRUD operations",
+          "description": "Create Lambda function to handle Create, Read, Update, and Delete operations for articles",
+          "dependencies": [
+            1
+          ],
+          "details": "Develop a Lambda function that processes API Gateway requests for article management. Implement handlers for POST (create), GET (read single/multiple), PUT (update), and DELETE operations. Include validation logic and proper error handling.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Configure API Gateway endpoints",
+          "description": "Set up API Gateway with routes for all article operations",
+          "dependencies": [
+            2
+          ],
+          "details": "Create an HTTP API in API Gateway with routes for /articles (GET, POST), /articles/{slug} (GET, PUT, DELETE), /articles/feed (GET), and configure proper integration with Lambda functions. Set up appropriate request/response mappings.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Implement slug generation and uniqueness validation",
+          "description": "Create logic to generate URL-friendly slugs from article titles and ensure uniqueness",
+          "dependencies": [
+            2
+          ],
+          "details": "Develop a function to convert article titles to URL-friendly slugs by removing special characters, replacing spaces with hyphens, and adding a unique identifier if needed. Implement checks to ensure slug uniqueness in the database.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Implement tagging functionality",
+          "description": "Add support for adding, removing, and filtering articles by tags",
+          "dependencies": [
+            2
+          ],
+          "details": "Extend the Lambda function to handle tag operations including adding tags to articles, removing tags, and querying articles by tags. Create endpoints for /tags to retrieve popular tags and implement filtering in the article list endpoint.",
+          "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "Implement favoriting and commenting features",
+          "description": "Add support for users to favorite articles and add comments",
+          "dependencies": [
+            2,
+            3
+          ],
+          "details": "Create additional DynamoDB tables or attributes to track article favorites and comments. Implement Lambda handlers for /articles/{slug}/favorite, /articles/{slug}/comments endpoints with POST, GET, and DELETE methods. Include counters for favorites.",
+          "status": "pending"
+        },
+        {
+          "id": 7,
+          "title": "Implement permissions and authorization",
+          "description": "Add permission checks to ensure only authorized users can modify articles",
+          "dependencies": [
+            2,
+            3,
+            6
+          ],
+          "details": "Integrate with authentication service to validate user tokens. Implement authorization checks to ensure only article authors can update/delete their articles. Add permission validation for comment deletion and article modification.",
+          "status": "pending"
+        },
+        {
+          "id": 8,
+          "title": "Create comprehensive tests and error handling",
+          "description": "Develop unit and integration tests, and implement robust error handling",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "details": "Write unit tests for all Lambda functions and utility methods. Create integration tests to verify API behavior. Implement consistent error handling with appropriate HTTP status codes and error messages. Set up CloudWatch logging for monitoring and debugging.",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "EventBridge Integration for Service Communication",
+      "description": "Implement event-based communication between microservices using AWS EventBridge",
+      "details": "1. Create EventBridge event bus\n2. Define event patterns and rules\n3. Set up Lambda functions as event targets\n4. Implement event publishers in services\n\n```typescript\nimport * as events from 'aws-cdk-lib/aws-events';\nimport * as targets from 'aws-cdk-lib/aws-events-targets';\n\n// Create event bus\nconst eventBus = new events.EventBus(this, 'RealWorldEventBus', {\n  eventBusName: 'realworld-events'\n});\n\n// Create event handler Lambda\nconst articleCreatedHandler = new nodejs.NodejsFunction(this, 'ArticleCreatedHandler', {\n  runtime: lambda.Runtime.NODEJS_18_X,\n  entry: 'src/events/article-created-handler.ts',\n  handler: 'handler',\n  environment: {\n    USERS_TABLE: usersTable.tableName\n  }\n});\n\n// Create rule for article creation events\nconst articleCreatedRule = new events.Rule(this, 'ArticleCreatedRule', {\n  eventBus,\n  eventPattern: {\n    source: ['realworld.articles'],\n    detailType: ['article.created']\n  },\n  targets: [new targets.LambdaFunction(articleCreatedHandler)]\n});\n\n// Grant permissions to publish events\neventBus.grantPutEventsTo(createArticleLambda);\n```\n\nImplementation for publishing events in create-article.ts:\n```typescript\nimport { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge';\n\nconst eventBridgeClient = new EventBridgeClient();\n\n// After creating the article\nconst eventParams = {\n  Entries: [\n    {\n      Source: 'realworld.articles',\n      DetailType: 'article.created',\n      Detail: JSON.stringify({\n        articleId: id,\n        slug,\n        title,\n        authorId: userId\n      }),\n      EventBusName: 'realworld-events'\n    }\n  ]\n};\n\nawait eventBridgeClient.send(new PutEventsCommand(eventParams));\n```\n\nImplementation for article-created-handler.ts:\n```typescript\nimport { DynamoDBClient } from '@aws-sdk/client-dynamodb';\nimport { DynamoDBDocumentClient, GetCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';\n\nconst ddbClient = new DynamoDBClient();\nconst ddbDocClient = DynamoDBDocumentClient.from(ddbClient);\n\nexport const handler = async (event) => {\n  const { articleId, slug, title, authorId } = JSON.parse(event.detail);\n  \n  try {\n    // Update author's article count\n    await ddbDocClient.send(new UpdateCommand({\n      TableName: process.env.USERS_TABLE,\n      Key: { id: authorId },\n      UpdateExpression: 'ADD articleCount :inc',\n      ExpressionAttributeValues: {\n        ':inc': 1\n      }\n    }));\n    \n    console.log(`Updated article count for user ${authorId}`);\n  } catch (error) {\n    console.error('Error handling article.created event:', error);\n  }\n};\n```",
+      "testStrategy": "1. Test event publishing from various services\n2. Verify event consumption by target Lambdas\n3. Test error handling and retry mechanisms\n4. Validate event schemas and patterns\n5. Test event bus permissions",
+      "priority": "medium",
+      "dependencies": [
+        8,
+        9
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create Event Bus",
+          "description": "Set up a custom EventBridge event bus to handle communication between microservices",
+          "dependencies": [],
+          "details": "Use AWS CLI or Console to create a dedicated event bus. Define appropriate naming conventions and tags. Consider multi-region requirements if applicable.",
+          "status": "pending"
+        },
+        {
+          "id": 2,
+          "title": "Define Event Patterns and Rules",
+          "description": "Create event patterns to filter events and rules to route them to appropriate targets",
+          "dependencies": [
+            1
+          ],
+          "details": "Design event patterns based on event structure (Source, DetailType, Detail). Create rules that match these patterns and specify target services. Consider using AWS SAM templates for infrastructure as code.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Configure Lambda Target Functions",
+          "description": "Set up Lambda functions that will process events routed by EventBridge rules",
+          "dependencies": [
+            2
+          ],
+          "details": "Implement Lambda handlers in Node.js that can process the event payload. Structure the code to handle different event types and implement appropriate business logic for each event type.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Implement Event Publisher",
+          "description": "Create service that will publish events to the EventBridge bus",
+          "dependencies": [
+            1
+          ],
+          "details": "Implement code using AWS SDK to call putEvents API. Structure events with proper Source, DetailType, Time, and Detail fields. Consider batching events for efficiency if applicable.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Configure IAM Permissions",
+          "description": "Set up necessary IAM roles and policies for event publishing and processing",
+          "dependencies": [
+            1,
+            3,
+            4
+          ],
+          "details": "Create IAM roles with least privilege for event publishers and consumers. Configure resource-based policies for the event bus if needed. Ensure Lambda execution roles have permissions to access other required AWS services.",
+          "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "Implement Event Schema Validation",
+          "description": "Define and implement schema validation for events to ensure consistency",
+          "dependencies": [
+            2,
+            4
+          ],
+          "details": "Create JSON schemas for event payloads. Implement validation in both publisher and consumer code. Consider using EventBridge Schema Registry for centralized schema management.",
+          "status": "pending"
+        },
+        {
+          "id": 7,
+          "title": "Implement Error Handling and Dead Letter Queues",
+          "description": "Set up error handling mechanisms and dead letter queues for failed event processing",
+          "dependencies": [
+            2,
+            3
+          ],
+          "details": "Configure dead letter queues (SQS) for failed event deliveries. Implement retry logic in Lambda functions. Set up monitoring and alerting for failed events. Consider implementing event replay capabilities.",
+          "status": "pending"
+        },
+        {
+          "id": 8,
+          "title": "Create Testing Framework",
+          "description": "Develop comprehensive testing strategy for the event-driven architecture",
+          "dependencies": [
+            3,
+            4,
+            6,
+            7
+          ],
+          "details": "Create unit tests for event publishers and consumers. Develop integration tests that verify end-to-end event flow. Set up test environments with mocked services. Implement load testing to verify system performance under high event volumes.",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "S3 and CloudFront Setup for Frontend Hosting",
+      "description": "Configure S3 bucket and CloudFront distribution for hosting the Angular frontend",
+      "details": "1. Create S3 bucket for static website hosting\n2. Configure bucket policies and CORS settings\n3. Set up CloudFront distribution with S3 origin\n4. Configure SSL certificate and custom domain (if applicable)\n5. Set up cache policies and origin request policies\n\n```typescript\nimport * as s3 from 'aws-cdk-lib/aws-s3';\nimport * as cloudfront from 'aws-cdk-lib/aws-cloudfront';\nimport * as origins from 'aws-cdk-lib/aws-cloudfront-origins';\nimport * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';\n\n// Create S3 bucket for frontend\nconst websiteBucket = new s3.Bucket(this, 'WebsiteBucket', {\n  websiteIndexDocument: 'index.html',\n  websiteErrorDocument: 'index.html',\n  publicReadAccess: false,\n  blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,\n  removalPolicy: cdk.RemovalPolicy.RETAIN,\n  cors: [\n    {\n      allowedMethods: [\n        s3.HttpMethods.GET,\n        s3.HttpMethods.HEAD\n      ],\n      allowedOrigins: ['*'],\n      allowedHeaders: ['*']\n    }\n  ]\n});\n\n// CloudFront distribution\nconst distribution = new cloudfront.Distribution(this, 'WebsiteDistribution', {\n  defaultBehavior: {\n    origin: new origins.S3Origin(websiteBucket),\n    viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,\n    cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,\n    allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD\n  },\n  errorResponses: [\n    {\n      httpStatus: 404,\n      responseHttpStatus: 200,\n      responsePagePath: '/index.html'\n    }\n  ],\n  priceClass: cloudfront.PriceClass.PRICE_CLASS_100\n});\n\n// Deploy frontend assets\nnew s3deploy.BucketDeployment(this, 'DeployWebsite', {\n  sources: [s3deploy.Source.asset('../frontend/dist')],\n  destinationBucket: websiteBucket,\n  distribution,\n  distributionPaths: ['/*']\n});\n```",
+      "testStrategy": "1. Verify S3 bucket configuration and permissions\n2. Test CloudFront distribution and caching behavior\n3. Validate CORS settings with cross-origin requests\n4. Test SSL configuration and custom domain (if applicable)\n5. Verify Angular application routing with CloudFront",
+      "priority": "medium",
+      "dependencies": [
+        2
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 12,
+      "title": "CI/CD Pipeline Implementation",
+      "description": "Set up CI/CD pipeline using GitHub Actions or AWS CodePipeline for automated deployment",
+      "details": "1. Create CI/CD pipeline infrastructure with CDK\n2. Configure source code repository integration\n3. Set up build, test, and deployment stages\n4. Implement environment-specific deployment workflows\n5. Configure notifications and approvals\n\n```typescript\nimport * as codepipeline from 'aws-cdk-lib/aws-codepipeline';\nimport * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';\nimport * as codebuild from 'aws-cdk-lib/aws-codebuild';\n\n// Create pipeline\nconst pipeline = new codepipeline.Pipeline(this, 'DeployPipeline', {\n  pipelineName: 'ServerlessRealWorldPipeline'\n});\n\n// Source stage\nconst sourceOutput = new codepipeline.Artifact();\nconst sourceAction = new codepipeline_actions.GitHubSourceAction({\n  actionName: 'GitHub',\n  owner: 'your-github-username',\n  repo: 'serverless-realworld',\n  oauthToken: cdk.SecretValue.secretsManager('github-token'),\n  output: sourceOutput,\n  branch: 'main'\n});\n\npipeline.addStage({\n  stageName: 'Source',\n  actions: [sourceAction]\n});\n\n// Build stage\nconst buildOutput = new codepipeline.Artifact();\nconst buildProject = new codebuild.PipelineProject(this, 'BuildProject', {\n  environment: {\n    buildImage: codebuild.LinuxBuildImage.STANDARD_5_0,\n    privileged: true\n  },\n  buildSpec: codebuild.BuildSpec.fromObject({\n    version: '0.2',\n    phases: {\n      install: {\n        'runtime-versions': {\n          nodejs: '18'\n        },\n        commands: [\n          'npm install -g aws-cdk',\n          'npm ci'\n        ]\n      },\n      build: {\n        commands: [\n          'npm run build',\n          'npm test',\n          'cdk synth'\n        ]\n      }\n    },\n    artifacts: {\n      'base-directory': 'cdk.out',\n      files: ['**/*']\n    }\n  })\n});\n\nconst buildAction = new codepipeline_actions.CodeBuildAction({\n  actionName: 'BuildAndTest',\n  project: buildProject,\n  input: sourceOutput,\n  outputs: [buildOutput]\n});\n\npipeline.addStage({\n  stageName: 'Build',\n  actions: [buildAction]\n});\n\n// Deploy stage\nconst deployAction = new codepipeline_actions.CloudFormationCreateUpdateStackAction({\n  actionName: 'DeployToDev',\n  templatePath: buildOutput.atPath('ServerlessRealWorldStack.template.json'),\n  stackName: 'ServerlessRealWorldStack-Dev',\n  adminPermissions: true\n});\n\npipeline.addStage({\n  stageName: 'DeployToDev',\n  actions: [deployAction]\n});\n```\n\nGitHub Actions workflow file (.github/workflows/deploy.yml):\n```yaml\nname: Deploy Serverless RealWorld\n\non:\n  push:\n    branches: [ main ]\n  pull_request:\n    branches: [ main ]\n\njobs:\n  build-and-deploy:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v3\n      \n      - name: Setup Node.js\n        uses: actions/setup-node@v3\n        with:\n          node-version: '18'\n          \n      - name: Install dependencies\n        run: npm ci\n        \n      - name: Build\n        run: npm run build\n        \n      - name: Test\n        run: npm test\n        \n      - name: Configure AWS credentials\n        uses: aws-actions/configure-aws-credentials@v1\n        with:\n          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}\n          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}\n          aws-region: us-east-1\n          \n      - name: Deploy with CDK\n        run: |\n          npm install -g aws-cdk\n          cdk deploy --require-approval never\n```",
+      "testStrategy": "1. Test pipeline configuration with CDK synth\n2. Verify GitHub integration and webhook configuration\n3. Test build and test stages with sample code changes\n4. Validate deployment to development environment\n5. Test rollback functionality\n6. Verify notifications and approval workflows",
+      "priority": "medium",
+      "dependencies": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7
+      ],
+      "status": "pending",
+      "subtasks": []
+    },
+    {
+      "id": 13,
+      "title": "Monitoring and Logging Setup",
+      "description": "Configure CloudWatch monitoring, alarms, and logging for all serverless components",
+      "details": "1. Set up CloudWatch log groups for Lambda functions\n2. Configure CloudWatch alarms for critical metrics\n3. Implement X-Ray tracing for request tracking\n4. Create CloudWatch dashboards for service monitoring\n5. Set up SNS notifications for alarms\n\n```typescript\nimport * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';\nimport * as sns from 'aws-cdk-lib/aws-sns';\nimport * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';\n\n// Create SNS topic for alarms\nconst alarmTopic = new sns.Topic(this, 'AlarmTopic', {\n  displayName: 'Serverless RealWorld Alarms'\n});\n\nalarmTopic.addSubscription(new subscriptions.EmailSubscription('admin@example.com'));\n\n// Create dashboard\nconst dashboard = new cloudwatch.Dashboard(this, 'RealWorldDashboard', {\n  dashboardName: 'ServerlessRealWorld'\n});\n\n// Add Lambda metrics to dashboard\ndashboard.addWidgets(\n  new cloudwatch.GraphWidget({\n    title: 'Lambda Invocations',\n    left: [\n      loginLambda.metric('Invocations'),\n      getProfileLambda.metric('Invocations'),\n      getArticlesLambda.metric('Invocations')\n    ]\n  }),\n  new cloudwatch.GraphWidget({\n    title: 'Lambda Errors',\n    left: [\n      loginLambda.metric('Errors'),\n      getProfileLambda.metric('Errors'),\n      getArticlesLambda.metric('Errors')\n    ]\n  })\n);\n\n// Add API Gateway metrics\ndashboard.addWidgets(\n  new cloudwatch.GraphWidget({\n    title: 'API Gateway Requests',\n    left: [api.metricCount()]\n  }),\n  new cloudwatch.GraphWidget({\n    title: 'API Gateway Latency',\n    left: [api.metricLatency()]\n  })\n);\n\n// Create alarms\nconst apiErrorAlarm = new cloudwatch.Alarm(this, 'ApiErrorAlarm', {\n  metric: api.metricClientError(),\n  threshold: 10,\n  evaluationPeriods: 1,\n  alarmDescription: 'API Gateway 4xx errors > 10 in 1 minute',\n  treatMissingData: cloudwatch.TreatMissingData.NOT_BREACHING\n});\n\napiErrorAlarm.addAlarmAction(new cw_actions.SnsAction(alarmTopic));\n\n// Enable X-Ray tracing\nconst xrayLayer = new lambda.LayerVersion(this, 'XRayLayer', {\n  code: lambda.Code.fromAsset('layers/xray'),\n  compatibleRuntimes: [lambda.Runtime.NODEJS_18_X],\n  description: 'AWS X-Ray SDK for Node.js'\n});\n\n// Add X-Ray tracing to Lambda functions\nloginLambda.addEnvironment('AWS_XRAY_SDK_ENABLED', 'true');\nloginLambda.addLayers(xrayLayer);\n```\n\nImplementation for Lambda with X-Ray tracing:\n```typescript\nimport { captureAWSClient } from 'aws-xray-sdk';\nimport { DynamoDBClient } from '@aws-sdk/client-dynamodb';\nimport { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';\n\n// Initialize and wrap DynamoDB client with X-Ray\nconst ddbClient = captureAWSClient(new DynamoDBClient());\nconst ddbDocClient = DynamoDBDocumentClient.from(ddbClient);\n\nexport const handler = async (event) => {\n  // Lambda implementation\n};\n```",
+      "testStrategy": "1. Verify CloudWatch log group creation and log retention settings\n2. Test alarm triggering with simulated errors\n3. Validate X-Ray tracing with test requests\n4. Test dashboard widgets with sample metrics\n5. Verify SNS notifications for alarms\n6. Test log insights queries for troubleshooting",
+      "priority": "medium",
+      "dependencies": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create CloudWatch Log Group",
+          "description": "Set up a new CloudWatch log group with a unique name, following AWS naming conventions and optionally configuring retention policies and encryption.",
+          "dependencies": [],
+          "details": "Use the AWS Console or CLI to create the log group. Ensure the name is unique within the region and does not start with 'aws/'. Optionally, set a retention policy and associate a symmetric KMS key for encryption if required.[1][3][4][5]",
+          "status": "pending"
+        },
+        {
+          "id": 2,
+          "title": "Configure CloudWatch Alarms",
+          "description": "Set up CloudWatch alarms to monitor specific metrics or log patterns and trigger actions when thresholds are breached.",
+          "dependencies": [
+            1
+          ],
+          "details": "Define the metrics or log filters to monitor, set threshold values, and configure alarm actions such as sending notifications or triggering automated responses.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Enable AWS X-Ray Tracing",
+          "description": "Integrate AWS X-Ray tracing with relevant services to capture distributed traces and visualize application performance.",
+          "dependencies": [
+            1
+          ],
+          "details": "Enable X-Ray on supported AWS services (e.g., Lambda, ECS, API Gateway) and ensure trace data is sent to X-Ray for analysis.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Create CloudWatch Dashboards",
+          "description": "Build CloudWatch dashboards to visualize key metrics, logs, and traces for real-time monitoring.",
+          "dependencies": [
+            2,
+            3
+          ],
+          "details": "Design dashboards with widgets displaying alarms, log insights, and X-Ray traces to provide a comprehensive monitoring view.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Set Up SNS Notifications",
+          "description": "Configure Amazon SNS topics and subscriptions to send notifications based on CloudWatch alarm states.",
+          "dependencies": [
+            2
+          ],
+          "details": "Create SNS topics, subscribe endpoints (email, SMS, Lambda, etc.), and link alarms to SNS actions for timely alerts.",
+          "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "Configure CloudWatch Log Insights",
+          "description": "Set up CloudWatch Log Insights queries for advanced log analysis and create saved queries for operational use.",
+          "dependencies": [
+            1
+          ],
+          "details": "Write and save queries to extract actionable insights from log data, and integrate results into dashboards if needed.",
+          "status": "pending"
+        },
+        {
+          "id": 7,
+          "title": "Test and Validate Monitoring Setup",
+          "description": "Perform end-to-end testing of the monitoring and logging setup to ensure all components work as expected.",
+          "dependencies": [
+            4,
+            5,
+            6
+          ],
+          "details": "Trigger test events, verify log ingestion, alarm triggering, SNS notifications, dashboard updates, and X-Ray trace visibility.",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "title": "Data Migration Strategy Implementation",
+      "description": "Develop and implement a strategy for migrating data from Cassandra to DynamoDB",
+      "details": "1. Create data migration Lambda function\n2. Implement data transformation logic for Cassandra to DynamoDB\n3. Set up migration validation and verification\n4. Create rollback mechanisms\n5. Implement incremental data sync for transition period\n\n```typescript\nimport * as lambda from 'aws-cdk-lib/aws-lambda';\nimport * as nodejs from 'aws-cdk-lib/aws-lambda-nodejs';\nimport * as iam from 'aws-cdk-lib/aws-iam';\n\n// Create migration Lambda\nconst dataMigrationLambda = new nodejs.NodejsFunction(this, 'DataMigrationFunction', {\n  runtime: lambda.Runtime.NODEJS_18_X,\n  entry: 'src/migration/data-migration.ts',\n  handler: 'handler',\n  timeout: cdk.Duration.minutes(15),\n  memorySize: 1024,\n  environment: {\n    USERS_TABLE: usersTable.tableName,\n    ARTICLES_TABLE: articlesTable.tableName,\n    CASSANDRA_HOST: 'your-cassandra-host',\n    CASSANDRA_KEYSPACE: 'your-keyspace'\n  }\n});\n\n// Grant permissions\nusersTable.grantReadWriteData(dataMigrationLambda);\narticlesTable.grantReadWriteData(dataMigrationLambda);\n\n// Add VPC access if Cassandra is in VPC\ndataMigrationLambda.addToRolePolicy(new iam.PolicyStatement({\n  effect: iam.Effect.ALLOW,\n  actions: [\n    'ec2:CreateNetworkInterface',\n    'ec2:DescribeNetworkInterfaces',\n    'ec2:DeleteNetworkInterface'\n  ],\n  resources: ['*']\n}));\n```\n\nImplementation for data-migration.ts:\n```typescript\nimport { DynamoDBClient } from '@aws-sdk/client-dynamodb';\nimport { DynamoDBDocumentClient, BatchWriteCommand } from '@aws-sdk/lib-dynamodb';\nimport { Client } from 'cassandra-driver';\n\nconst ddbClient = new DynamoDBClient();\nconst ddbDocClient = DynamoDBDocumentClient.from(ddbClient);\n\n// Connect to Cassandra\nconst cassandraClient = new Client({\n  contactPoints: [process.env.CASSANDRA_HOST],\n  localDataCenter: 'datacenter1',\n  keyspace: process.env.CASSANDRA_KEYSPACE\n});\n\nexport const handler = async (event) => {\n  try {\n    // Migrate users\n    await migrateUsers();\n    \n    // Migrate articles\n    await migrateArticles();\n    \n    return {\n      statusCode: 200,\n      body: JSON.stringify({ message: 'Migration completed successfully' })\n    };\n  } catch (error) {\n    console.error('Migration error:', error);\n    return {\n      statusCode: 500,\n      body: JSON.stringify({ message: 'Migration failed', error: error.message })\n    };\n  } finally {\n    await cassandraClient.shutdown();\n  }\n};\n\nasync function migrateUsers() {\n  const query = 'SELECT * FROM users';\n  const result = await cassandraClient.execute(query);\n  \n  // Process in batches of 25 (DynamoDB BatchWrite limit)\n  for (let i = 0; i < result.rows.length; i += 25) {\n    const batch = result.rows.slice(i, i + 25);\n    \n    const params = {\n      RequestItems: {\n        [process.env.USERS_TABLE]: batch.map(user => ({\n          PutRequest: {\n            Item: {\n              id: user.id.toString(),\n              email: user.email,\n              username: user.username,\n              bio: user.bio || null,\n              image: user.image || null,\n              password: user.password, // Note: Consider rehashing passwords\n              createdAt: user.created_at.toISOString(),\n              updatedAt: user.updated_at.toISOString()\n            }\n          }\n        }))\n      }\n    };\n    \n    await ddbDocClient.send(new BatchWriteCommand(params));\n    console.log(`Migrated users batch ${i/25 + 1}`);\n  }\n}\n\nasync function migrateArticles() {\n  // Similar implementation for articles\n}\n```\n\nIncremental sync implementation:\n```typescript\nimport { Client } from 'cassandra-driver';\nimport { DynamoDBClient } from '@aws-sdk/client-dynamodb';\nimport { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';\n\nexport const handler = async (event) => {\n  // Connect to Cassandra and DynamoDB\n  \n  // Get last sync timestamp from DynamoDB or parameter store\n  const lastSyncTime = await getLastSyncTime();\n  \n  // Query Cassandra for records updated since last sync\n  const query = 'SELECT * FROM users WHERE updated_at > ? ALLOW FILTERING';\n  const result = await cassandraClient.execute(query, [lastSyncTime], { prepare: true });\n  \n  // Update DynamoDB with changed records\n  for (const user of result.rows) {\n    await ddbDocClient.send(new PutCommand({\n      TableName: process.env.USERS_TABLE,\n      Item: {\n        // User properties\n      }\n    }));\n  }\n  \n  // Update last sync timestamp\n  await updateLastSyncTime(new Date());\n};\n```",
+      "testStrategy": "1. Test data migration with sample Cassandra data\n2. Verify data integrity after migration\n3. Test incremental sync with modified records\n4. Validate rollback procedures\n5. Performance test with large datasets\n6. Test error handling and recovery mechanisms",
+      "priority": "high",
+      "dependencies": [
+        3
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Design Migration Lambda Function",
+          "description": "Create the AWS Lambda function responsible for orchestrating the migration process from Cassandra to DynamoDB.",
+          "dependencies": [],
+          "details": "Define the Lambda's triggers, permissions, and integration points with source (Cassandra) and target (DynamoDB) systems.",
+          "status": "pending"
+        },
+        {
+          "id": 2,
+          "title": "Implement Data Transformation Logic",
+          "description": "Develop the logic to transform Cassandra data models and records into DynamoDB-compatible formats.",
+          "dependencies": [
+            1
+          ],
+          "details": "Handle schema mapping, data type conversions, and any necessary data enrichment or normalization.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Develop Migration Validation Procedures",
+          "description": "Establish validation mechanisms to ensure data integrity and consistency post-migration.",
+          "dependencies": [
+            2
+          ],
+          "details": "Implement record counts, checksums, and sample data comparisons between Cassandra and DynamoDB.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Design Rollback Mechanisms",
+          "description": "Create strategies and tooling to revert changes in case of migration failures or data inconsistencies.",
+          "dependencies": [
+            3
+          ],
+          "details": "Plan for backup, restore, and undo operations for both source and target systems.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Implement Incremental Sync Logic",
+          "description": "Enable ongoing synchronization of changes from Cassandra to DynamoDB during and after the initial migration.",
+          "dependencies": [
+            2
+          ],
+          "details": "Capture and apply inserts, updates, and deletes occurring in Cassandra after the initial data extraction.",
+          "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "Integrate Error Handling and Logging",
+          "description": "Add robust error handling, retry logic, and detailed logging to the migration Lambda and related components.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Ensure all failures are captured, logged, and actionable alerts are generated.",
+          "status": "pending"
+        },
+        {
+          "id": 7,
+          "title": "Conduct Performance and Load Testing",
+          "description": "Test the migration process under realistic data volumes and access patterns to identify bottlenecks.",
+          "dependencies": [
+            2,
+            5
+          ],
+          "details": "Simulate large-scale data transfers and incremental sync to validate throughput and latency.",
+          "status": "pending"
+        },
+        {
+          "id": 8,
+          "title": "Set Up Monitoring and Alerting",
+          "description": "Implement monitoring dashboards and alerting for migration progress, errors, and system health.",
+          "dependencies": [
+            6,
+            7
+          ],
+          "details": "Use AWS CloudWatch or similar tools to track Lambda execution, data transfer rates, and error metrics.",
+          "status": "pending"
+        },
+        {
+          "id": 9,
+          "title": "Prepare Migration Documentation",
+          "description": "Document the migration architecture, procedures, troubleshooting steps, and rollback plans.",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "details": "Ensure all stakeholders have clear guidance for execution, validation, and support.",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "title": "Documentation and Handover",
+      "description": "Create comprehensive documentation for the serverless architecture and prepare handover materials",
+      "details": "1. Create architecture diagrams and documentation\n2. Document API contracts and integration points\n3. Prepare deployment and operations guides\n4. Document monitoring and alerting setup\n5. Create troubleshooting guides\n6. Prepare cost optimization recommendations\n\nArchitecture documentation should include:\n- High-level architecture diagram\n- Service interaction diagrams\n- Data flow diagrams\n- Authentication flow documentation\n- API documentation (REST and GraphQL)\n- Event schema documentation\n- DynamoDB access patterns documentation\n\nOperations documentation should include:\n- Deployment procedures\n- Rollback procedures\n- Monitoring dashboard usage\n- Alarm response procedures\n- Backup and restore procedures\n- Scaling considerations\n- Cost optimization strategies\n\nDeveloper documentation should include:\n- Local development setup\n- Testing procedures\n- CI/CD pipeline usage\n- Code structure and organization\n- Contribution guidelines\n- Troubleshooting common issues",
+      "testStrategy": "1. Review documentation for completeness and accuracy\n2. Validate architecture diagrams against implemented infrastructure\n3. Test deployment procedures with new team members\n4. Verify API documentation with actual endpoints\n5. Test troubleshooting guides with simulated issues\n6. Conduct knowledge transfer sessions with team",
+      "priority": "low",
+      "dependencies": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "status": "pending",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create Architecture Diagrams",
+          "description": "Develop comprehensive architecture diagrams that visualize the system components, their relationships, and data flows.",
+          "dependencies": [],
+          "details": "Include high-level system overview diagrams, component diagrams showing service interactions, data flow diagrams, and infrastructure architecture. Use standardized notation and ensure diagrams are clear and accessible to technical and non-technical stakeholders.",
+          "status": "pending"
+        },
+        {
+          "id": 2,
+          "title": "Develop API Documentation",
+          "description": "Create detailed API documentation following best practices to ensure developers can effectively use all available endpoints.",
+          "dependencies": [
+            1
+          ],
+          "details": "Use OpenAPI/Swagger specifications as a single source of truth, include authentication instructions, document all endpoints with request/response examples, maintain consistent terminology, and ensure documentation stays synchronized with the actual API implementation.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Write Deployment Guides",
+          "description": "Create step-by-step deployment guides for all environments that detail the process for setting up and deploying the system.",
+          "dependencies": [
+            1
+          ],
+          "details": "Include prerequisites, environment setup instructions, configuration parameters, deployment commands, verification steps, and rollback procedures. Document both initial deployment and update processes.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Develop Operations Documentation",
+          "description": "Create comprehensive operations documentation that covers day-to-day management of the system.",
+          "dependencies": [
+            1,
+            3
+          ],
+          "details": "Include routine maintenance procedures, backup and recovery processes, scaling procedures, security protocols, and regular health check procedures. Document the operational responsibilities and schedules for different team roles.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Create Monitoring and Alerting Documentation",
+          "description": "Document all monitoring systems, metrics, and alerting thresholds to ensure operational visibility.",
+          "dependencies": [
+            4
+          ],
+          "details": "Detail all monitoring tools used, key metrics being tracked, alert thresholds and severity levels, escalation procedures, and dashboard access information. Include instructions for setting up new alerts and modifying existing ones.",
+          "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "Develop Troubleshooting Guides",
+          "description": "Create detailed troubleshooting guides for common issues and error scenarios.",
+          "dependencies": [
+            2,
+            4,
+            5
+          ],
+          "details": "Document common failure modes, error messages with explanations, diagnostic procedures, resolution steps, and contact information for escalation. Include real examples of past incidents and their resolutions where applicable.",
+          "status": "pending"
+        },
+        {
+          "id": 7,
+          "title": "Prepare Cost Optimization Recommendations",
+          "description": "Document current costs and provide recommendations for optimizing resource usage and reducing expenses.",
+          "dependencies": [
+            1,
+            4
+          ],
+          "details": "Include current cost breakdown by service/component, identify potential areas for optimization, provide specific recommendations with estimated savings, document resource scaling strategies based on load, and suggest monitoring approaches for ongoing cost management.",
+          "status": "pending"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+# Task ID: 3
+# Title: DynamoDB Table Design and Implementation
+# Status: pending
+# Dependencies: 2
+# Priority: high
+# Description: Design and implement DynamoDB tables with appropriate indexes based on access patterns, migrating from the existing Cassandra schema
+# Details:
+1. Analyze existing Cassandra schema and identify access patterns
+2. Design DynamoDB table structure with appropriate partition and sort keys
+3. Define Global Secondary Indexes (GSIs) for supporting query patterns
+4. Implement DynamoDB tables using CDK with:
+   - User table
+   - Profile table
+   - Article table
+   - Comment table
+   - Tag table
+   - Follow relationship table
+5. Configure auto-scaling for read/write capacity
+6. Set up TTL for temporary data if needed
+7. Implement backup strategy
+
+# Test Strategy:
+1. Unit test the table definitions
+2. Create test data and validate query patterns
+3. Perform load testing to validate throughput
+4. Test GSI performance for common queries
+5. Validate data migration scripts with sample data

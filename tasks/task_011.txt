@@ -1,0 +1,41 @@
+# Task ID: 11
+# Title: Article Service Lambda Implementation
+# Status: pending
+# Dependencies: 5, 6, 7, 8, 9
+# Priority: medium
+# Description: Implement Lambda functions for article management
+# Details:
+1. Create Lambda functions for article operations:
+   - Create article
+   - Get article
+   - Update article
+   - Delete article
+   - List articles
+   - Favorite article
+   - Unfavorite article
+   - Add comment
+   - Get comments
+   - Delete comment
+2. Implement business logic for each operation
+3. Integrate with DynamoDB repositories
+4. Add authentication and authorization checks
+5. Implement event publishing to SQS FIFO queue for article changes
+   - Utilize FIFO queue characteristics (order guarantee, exactly-once processing)
+   - Ensure data consistency for articles and comments
+   - Apply SOLID principles and Clean Architecture for event publishing logic
+   - Implement proper message group IDs to maintain ordering where needed
+6. Add logging and error handling
+7. Implement pagination and filtering for list operations
+8. Optimize Lambda performance (memory, timeout)
+
+# Test Strategy:
+1. Unit test each Lambda function
+2. Integration test with DynamoDB and SQS FIFO queue
+3. Test authentication and authorization
+4. Validate event publishing to SQS FIFO queue
+   - Verify message ordering is maintained
+   - Test deduplication functionality
+   - Ensure consistency guarantees are met
+5. Test pagination and filtering
+6. Performance test article operations
+7. Test error handling and recovery scenarios with SQS FIFO

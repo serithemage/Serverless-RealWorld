@@ -1,0 +1,25 @@
+# Task ID: 12
+# Title: Tag Service Lambda Implementation
+# Status: pending
+# Dependencies: 5, 6, 7, 8, 9
+# Priority: low
+# Description: Implement Lambda functions for tag management
+# Details:
+1. Create Lambda functions for tag operations:
+   - Get tags
+   - Add tag to article
+   - Remove tag from article
+   - List articles by tag
+2. Implement business logic for each operation
+3. Integrate with DynamoDB repositories
+4. Add authentication and authorization checks
+5. Implement event handling for tag-related events
+6. Add logging and error handling
+7. Optimize Lambda performance (memory, timeout)
+
+# Test Strategy:
+1. Unit test each Lambda function
+2. Integration test with DynamoDB
+3. Test authentication and authorization
+4. Test event handling
+5. Performance test tag operations

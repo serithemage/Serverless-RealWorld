@@ -1,0 +1,27 @@
+# Task ID: 9
+# Title: SQS FIFO Queue Setup for Service Communication
+# Status: pending
+# Dependencies: 2
+# Priority: medium
+# Description: Set up Amazon SQS FIFO queues for asynchronous communication between microservices
+# Details:
+1. Create SQS FIFO queues for different event types:
+   - User events queue
+   - Article events queue
+   - Comment events queue
+2. Configure queue properties:
+   - Message retention period
+   - Visibility timeout
+   - Dead-letter queue
+3. Set up IAM permissions for services to send/receive messages
+4. Implement content-based deduplication
+5. Configure message group IDs strategy
+6. Set up CloudWatch alarms for queue metrics
+7. Create utility functions for sending/receiving messages
+
+# Test Strategy:
+1. Test message sending and receiving
+2. Validate FIFO ordering with message groups
+3. Test deduplication functionality
+4. Verify dead-letter queue functionality
+5. Load test queue performance
